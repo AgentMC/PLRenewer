@@ -1,0 +1,5 @@
+﻿mf Lib\Microsoft.DirectX.AudioVideoPlayback.dll::Microsoft.DirectX.AudioVideoPlayback.dll
+mf Lib\Microsoft.DirectX.AudioVideoPlayback.xml::Microsoft.DirectX.AudioVideoPlayback.xml
+mf Lib\Microsoft.DirectX.dll::Microsoft.DirectX.dll
+mf Lib\Microsoft.DirectX.xml::Microsoft.DirectX.xml
+dd Lib
