@@ -1326,31 +1326,31 @@
 	End Sub
 	Private Sub ContextMenu_Disk_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles CM_Disk.Opening
 		LS("CM_Disk_Opening: begin") : LogLevel += 1
-		CM_Disk.Items.Clear()
-		Dim d As IO.DriveInfo() = IO.DriveInfo.GetDrives()
+        CM_Disk.Items.Clear()
+        Dim d As UIO.DriveInfo() = UIO.DriveInfo.GetDrives()
 		LS("Disks: " & d.Length)
-		For Each di As IO.DriveInfo In d
-			LX("Drive: " & di.Name & ", type: " & di.DriveType & ", ready: " & di.IsReady)
-			If (di.DriveType = IO.DriveType.Removable Or di.DriveType = IO.DriveType.Fixed) AndAlso di.IsReady Then
-				CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name)
-				If IO.Directory.Exists(di.Name & "Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\")
-				If IO.Directory.Exists(di.Name & "Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\")
-				If IO.Directory.Exists(di.Name & "MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\")
-				If IO.Directory.Exists(di.Name & "Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\")
-				If IO.Directory.Exists(di.Name & "Music\Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\Audio\")
-				If IO.Directory.Exists(di.Name & "Music\MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\MP3\")
-				If IO.Directory.Exists(di.Name & "Music\Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\Sounds\")
-				If IO.Directory.Exists(di.Name & "Audio\Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\Music\")
-				If IO.Directory.Exists(di.Name & "Audio\MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\MP3\")
-				If IO.Directory.Exists(di.Name & "Audio\Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\Sounds\")
-				If IO.Directory.Exists(di.Name & "MP3\Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\Audio\")
-				If IO.Directory.Exists(di.Name & "MP3\Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\Music\")
-				If IO.Directory.Exists(di.Name & "MP3\Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\Sounds\")
-				If IO.Directory.Exists(di.Name & "Sounds\Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\Audio\")
-				If IO.Directory.Exists(di.Name & "Sounds\MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\MP3\")
-				If IO.Directory.Exists(di.Name & "Sounds\Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\Music\")
-			End If
-		Next
+        For Each di In d
+            LX("Drive: " & di.Name & ", type: " & di.DriveType & ", ready: " & di.IsReady)
+            If (di.DriveType = IO.DriveType.Removable Or di.DriveType = IO.DriveType.Fixed) AndAlso di.IsReady Then
+                CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name)
+                If UIO.Directory.Exists(di.Name & "Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\")
+                If UIO.Directory.Exists(di.Name & "Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\")
+                If UIO.Directory.Exists(di.Name & "MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\")
+                If UIO.Directory.Exists(di.Name & "Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\")
+                If UIO.Directory.Exists(di.Name & "Music\Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\Audio\")
+                If UIO.Directory.Exists(di.Name & "Music\MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\MP3\")
+                If UIO.Directory.Exists(di.Name & "Music\Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Music\Sounds\")
+                If UIO.Directory.Exists(di.Name & "Audio\Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\Music\")
+                If UIO.Directory.Exists(di.Name & "Audio\MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\MP3\")
+                If UIO.Directory.Exists(di.Name & "Audio\Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Audio\Sounds\")
+                If UIO.Directory.Exists(di.Name & "MP3\Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\Audio\")
+                If UIO.Directory.Exists(di.Name & "MP3\Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\Music\")
+                If UIO.Directory.Exists(di.Name & "MP3\Sounds") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "MP3\Sounds\")
+                If UIO.Directory.Exists(di.Name & "Sounds\Audio") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\Audio\")
+                If UIO.Directory.Exists(di.Name & "Sounds\MP3") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\MP3\")
+                If UIO.Directory.Exists(di.Name & "Sounds\Music") Then CM_Disk.Items.Add("{" & di.VolumeLabel & "} " & di.Name & "Sounds\Music\")
+            End If
+        Next
 		LS("Added " & CM_Disk.Items.Count & " items")
 		LogLevel += 1
 		For i As Integer = 0 To CM_Disk.Items.Count - 1
