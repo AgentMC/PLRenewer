@@ -327,13 +327,13 @@
         Else
             If b Then
                 LS("Проверка успешна, адрес: " & ComboBox2.Text)
-                Dim drvs As IO.DriveInfo() = IO.DriveInfo.GetDrives
-                For i As Integer = 0 To drvs.Length - 1
-                    If Strings.Left(drvs(i).Name, 2) = Strings.Left(ComboBox2.Text, 2) Then
+                For Each drv In UIO.DriveInfo.GetDrives
+                    If ComboBox2.Text.StartsWith(drv.Name) Then
                         TrackBar1.Value = 0
-                        TrackBar1.Maximum = CInt(GetFullSizeMBStrict(drvs(i).TotalFreeSpace))
+                        TrackBar1.Maximum = CInt(GetFullSizeMBStrict(drv.TotalFreeSpace))
                         TrackBar1.Value = TrackBar1.Maximum
-                        LS("Диск " & drvs(i).Name & ", свободно " & drvs(i).TotalFreeSpace)
+                        LS("Диск " & drv.Name & ", свободно " & drv.TotalFreeSpace)
+                        Exit For
                     End If
                 Next
             Else
@@ -1898,32 +1898,31 @@
     'Внутренние процедуры копирования.
     Sub CopyFile(ByVal fin As String, ByVal fout As String)
         Try
-            Dim instr As New IO.FileStream(fin, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite)
-            PLPB2Max = instr.Length
-            PLPB2Val = 0
-            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(fout))
-            Dim outstr As New IO.FileStream(fout, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
-            Dim tick As Integer
-            Try
-                Dim arr(511999) As Byte
-                Dim tBuf As Integer
-                While instr.Position < instr.Length
-                    tick = My.Computer.Clock.TickCount
-                    instr.Read(arr, 0, 512000)
-                    tBuf = If(instr.Position = instr.Length, CInt(instr.Length Mod 512000), 512000)
-                    outstr.Write(arr, 0, tBuf)
-                    PLPBVal += tBuf
-                    PLPB2Val += tBuf
-                    Ticks += My.Computer.Clock.TickCount - tick
-                End While
-                ProcessingInternal = 1
-            Catch ex As Exception
-                ProcessingInternal = -1
-                LastErrorText = ex.Message.TrimEnd(New Char() {Chr(13), Chr(10)})
-            End Try
-            instr.Close()
-            outstr.Flush()
-            outstr.Close()
+            Using instr As New UIO.FileStream(fin, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite)
+                PLPB2Max = instr.Length
+                PLPB2Val = 0
+                UIO.Directory.CreateDirectory(UIO.Path.GetDirectoryName(fout))
+                Using outstr As New UIO.FileStream(fout, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None, CULng(instr.Length))
+                    Dim tick As Integer
+                    Try
+                        Dim arr(511999) As Byte
+                        Dim tBuf As Integer
+                        While instr.Position < instr.Length
+                            tick = My.Computer.Clock.TickCount
+                            instr.Read(arr, 0, 512000)
+                            tBuf = If(instr.Position = instr.Length, CInt(instr.Length Mod 512000), 512000)
+                            outstr.Write(arr, 0, tBuf)
+                            PLPBVal += tBuf
+                            PLPB2Val += tBuf
+                            Ticks += My.Computer.Clock.TickCount - tick
+                        End While
+                        ProcessingInternal = 1
+                    Catch ex As Exception
+                        ProcessingInternal = -1
+                        LastErrorText = ex.Message.TrimEnd(New Char() {Chr(13), Chr(10)})
+                    End Try
+                End Using
+            End Using
         Catch ex As Exception
             ProcessingInternal = -1
             LastErrorText = ex.Message
@@ -2638,7 +2637,7 @@
     End Function
     Function PathExists(ByVal Path As String) As Boolean
         LX("-> PathExists: question @ " & Path)
-        Return Len(Path) > 1 AndAlso (Path.ToCharArray()(1) = ":" Or Path.StartsWith("\\")) AndAlso IO.Directory.Exists(Path)
+        Return UIO.Directory.Exists(Path)
     End Function
     Function RoundRectangle(ByVal rect As Rectangle, ByVal rFractor As Integer) As Drawing2D.GraphicsPath
         Dim path As New Drawing2D.GraphicsPath()
