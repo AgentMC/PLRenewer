@@ -304,17 +304,16 @@
         LS("ГУЙ: Нажата кнопка 7")
         CM_Delete.Show(Button7, New Point(0, 0))
     End Sub
-    Private Sub Button8_OpenSource(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
-        LS("ГУЙ: Нажата кнопка 8; Комманда: " & If(TextBox4.Enabled AndAlso IO.File.Exists(TextBox4.Text), TextBox4.Text, "explorer") & " " & """" & ComboBox1.Text & """")
-        Process.Start(If(TextBox4.Enabled AndAlso IO.File.Exists(TextBox4.Text), TextBox4.Text, "explorer"), """" & ComboBox1.Text & """")
+    Private Sub Button8_OpenSource_Button10_OpenDestination(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click, Button10.Click
+        Dim textHolder As ComboBox = If(sender Is Button8, ComboBox1, ComboBox2)
+        Dim command As String = If(TextBox4.Enabled AndAlso IO.File.Exists(TextBox4.Text), TextBox4.Text, "explorer")
+        Dim arguments As String = """" & UIO.Directory.GetFileSystemOpenPath(textHolder.Text) & """"
+        LS("ГУЙ: Нажата кнопка " & CType(sender, Control).Name & "; Комманда: " & command & " " & arguments)
+        Process.Start(command, arguments)
     End Sub
     Private Sub Button9_ShowContextMenu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
         LS("ГУЙ: Нажата кнопка 9")
         CM_Edit.Show(Button9, New Point(0, 0))
-    End Sub
-    Private Sub Button10_OpenDestination(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button10.Click
-        LS("ГУЙ: Нажата кнопка 10; Комманда: " & If(TextBox4.Enabled AndAlso IO.File.Exists(TextBox4.Text), TextBox4.Text, "explorer") & " " & """" & ComboBox2.Text & """")
-        Process.Start(If(TextBox4.Enabled AndAlso IO.File.Exists(TextBox4.Text), TextBox4.Text, "explorer"), """" & ComboBox2.Text & """")
     End Sub
     Private Sub Button11_GetFreeSpace(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button11.Click
         Dim b As Boolean = PathExists(ComboBox2.Text)
