@@ -1249,14 +1249,14 @@
         If MsgBox("Внимание: эта функция удаляет ВСЕ (а не только музыкальные) файлы и/или папки в объекте-приёмнике. Продолжить?", MsgBoxStyle.Exclamation Or MsgBoxStyle.YesNo, "Внимание!") = MsgBoxResult.No Then Exit Sub
         If CInt(e.ClickedItem.Tag) <> 1 Then
             LS("файлы...")
-            Dim delFiles() As String = IO.Directory.GetFiles(ComboBox2.Text, "*.*", IO.SearchOption.TopDirectoryOnly)
+            Dim delFiles() As String = UIO.Directory.GetFiles(ComboBox2.Text)
             PLPB2Val = 0
             PLPB2Max = 2
             PLPleaseWait_Init("Удаляются файлы...", 0, delFiles.Length, 0)
             LS("всего " & delFiles.Length) : LogLevel += 1
             For i As Integer = 0 To delFiles.Length - 1
                 Try
-                    IO.File.Delete(delFiles(i))
+                    UIO.File.Delete(delFiles(i))
                     LX("Файл " & delFiles(i) & " был удалён!")
                 Catch ex As Exception
                     Achtung("Файл № " & i & ", «" & delFiles(i) & "», удалить не удалось: " & ex.Message)
@@ -1269,12 +1269,12 @@
         PLPB2Val = 1
         If CInt(CInt(e.ClickedItem.Tag)) > 0 Then
             LS("папки...")
-            Dim delFolders() As String = IO.Directory.GetDirectories(ComboBox2.Text, "*", IO.SearchOption.TopDirectoryOnly)
+            Dim delFolders() As String = UIO.Directory.GetDirectories(ComboBox2.Text)
             PLPleaseWait_Init("Удаляются папки...", 0, delFolders.Length, 0)
             LS("всего " & delFolders.Length) : LogLevel += 1
             For i As Integer = 0 To delFolders.Length - 1
                 Try
-                    IO.Directory.Delete(delFolders(i), True)
+                    UIO.Directory.Delete(delFolders(i), True)
                     LX("Папка " & delFolders(i) & " удалена!")
                 Catch ex As Exception
                     Achtung("Папку № " & i & ", «" & delFolders(i) & "», удалить не удалось: " & ex.Message)
