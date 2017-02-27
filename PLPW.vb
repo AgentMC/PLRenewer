@@ -107,9 +107,10 @@
 		bg.Render()
 		bg.Dispose()
 	End Sub
-	Private Sub PLPleaseWait_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-		Me.Region = New Region(New Rectangle(5, 20, Me.Width - 10, Me.Height - 25))
-	End Sub
+    Private Sub PLPleaseWait_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        Dim topleft = PointToScreen(New Point(0, 0))
+        Me.Region = New Region(New Rectangle(topleft.X - Left, topleft.Y - Top, ClientRectangle.Width, ClientRectangle.Height))
+    End Sub
 	Property Value1() As Long
 		Get
 			Return PB_Val
