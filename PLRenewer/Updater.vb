@@ -6,11 +6,17 @@ Friend Class Updater
     Private wc As WebClient
     Private dwnl_start As Date
 
+    Private Class Web
+        Friend Const AssemblyInfo As String = "https://raw.githubusercontent.com/AgentMC/PLRenewer/master/PLRenewer/My%20Project/AssemblyInfo.vb"
+        Friend Const LogFile As String = "https://raw.githubusercontent.com/AgentMC/PLRenewer/master/Updater/UpdateData/log.txt"
+        Friend Const UpdateFile As String = "https://raw.githubusercontent.com/AgentMC/PLRenewer/master/Updater/UpdateData/update.hdz"
+    End Class
+
     Sub New(ByVal host As ILoggerHost)
         log = host
         wc = New WebClient()
         log.LS("Updater: begin cross-thread async dl of description...")
-        Threading.ThreadPool.QueueUserWorkItem(AddressOf WebInitializer, "http://plrenewer.googlecode.com/svn/trunk/My%20Project/AssemblyInfo.vb")
+        Threading.ThreadPool.QueueUserWorkItem(AddressOf WebInitializer, Web.AssemblyInfo)
     End Sub
     Private Sub WebInitializer(ByVal uri As Object)
         CtLog("Updater: thread launched", False)
@@ -50,7 +56,7 @@ Friend Class Updater
                                 log.LS("Updater: dialog will be shown")
                                 InitializeComponent()
                                 Label3.Text = My.Application.Info.Version.ToString & vbCrLf & newVer
-                                TextBox1.Text = wc.DownloadString("http://plrenewer.googlecode.com/svn/trunk/log.txt")
+                                TextBox1.Text = wc.DownloadString(Web.LogFile)
                                 log.LX("Updater: showing up...")
                                 Me.ShowDialog(CType(log, IWin32Window))
                                 Exit For
@@ -77,60 +83,56 @@ Friend Class Updater
         Me.Close()
     End Sub
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        '		Button1.Enabled = False
-        '		Button2.Enabled = False
-        '		Button3.Enabled = False
-        '		dwnl = True
-        '		dwnl_ok = False
-        '		Dim temp As String = Environment.GetEnvironmentVariable("temp")
-        '		Dim dyn_hdzname As String = ""
-        '		Try
-        '			log.LS("Updater: begin async dl of descr...")
-        '			Dim writer As New IO.FileStream(temp & "\PLU.exe", IO.FileMode.Create, IO.FileAccess.ReadWrite, IO.FileShare.ReadWrite)
-        '			writer.Write(My.Resources.Plu, 0, My.Resources.Plu.Length)
-        '			writer.Flush()
-        '			writer.Close()
-        '			writer.Dispose()
-        '			writer = New IO.FileStream(temp & "\HDZArchive.dll", IO.FileMode.Create, IO.FileAccess.ReadWrite, IO.FileShare.ReadWrite)
-        '			writer.Write(My.Resources.HDZArchive, 0, My.Resources.HDZArchive.Length)
-        '			writer.Flush()
-        '			writer.Close()
-        '			writer.Dispose()
-        '			dyn_hdzname = temp & "\" & Now.Ticks.ToString
-        '			AddHandler wc.DownloadProgressChanged, AddressOf DwnlProgress
-        '			AddHandler wc.DownloadFileCompleted, AddressOf DwnlEnd
-        '			ProgressBar1.Visible = True
-        '			Label5.Visible = True
-        '			dwnl_start = Now
-        '			wc.DownloadFileAsync(New Uri("http://plrenewer.googlecode.com/svn/trunk/bin/x86/Release/Update.hdz"), dyn_hdzname)
-        '			While dwnl
-        '				Threading.Thread.Sleep(10)
-        '				Application.DoEvents()
-        '			End While
-        '			RemoveHandler wc.DownloadProgressChanged, AddressOf DwnlProgress
-        '			RemoveHandler wc.DownloadFileCompleted, AddressOf DwnlEnd
-        '			ProgressBar1.Visible = False
-        '			Label5.Visible = False
-        '		Catch ex As Exception
-        '			dwnl_ok = False
-        '			MsgBox(ex.Message, MsgBoxStyle.ApplicationModal Or MsgBoxStyle.Exclamation, "Ошибка при обновлении")
-        '		End Try
-        '		Try
-        '			If dwnl_ok Then
-        '				Dim psi As New ProcessStartInfo(temp & "\Plu.exe", "/hdz """ & dyn_hdzname & """ /path """ & Application.ExecutablePath & """ /exe PLReNewer.exe")
-        '				If Not IsAdmin Then psi.Verb = "runas"
-        '				psi.UseShellExecute = True
-        '				Process.Start(psi)
-        '				Me.Close()
-        '				CType(log, Form).Close()
-        '			Else
-        '				Throw New Exception()
-        '			End If
-        '		Catch ex As Exception
-        '			Button1.Enabled = True
-        '			Button2.Enabled = True
-        '			Button3.Enabled = True
-        '		End Try
+        Button1.Enabled = False
+        Button2.Enabled = False
+        Button3.Enabled = False
+        dwnl = True
+        dwnl_ok = False
+        Dim temp As String = Environment.GetEnvironmentVariable("temp")
+        Dim localPath As String = IO.Path.GetDirectoryName(Application.ExecutablePath)
+        Const pluFn = "PLU.exe", hdzaFn = "HDZArchive.dll"
+        Dim dyn_hdzname As String = ""
+        Try
+            log.LS("Updater: copying updater engine to temp...")
+            IO.File.Copy(IO.Path.Combine(localPath, pluFn), IO.Path.Combine(temp, pluFn), True)
+            IO.File.Copy(IO.Path.Combine(localPath, hdzaFn), IO.Path.Combine(temp, hdzaFn), True)
+
+            log.LS("Updater: begin async dl of descr...")
+            dyn_hdzname = IO.Path.Combine(temp, Now.Ticks.ToString)
+            AddHandler wc.DownloadProgressChanged, AddressOf DwnlProgress
+            AddHandler wc.DownloadFileCompleted, AddressOf DwnlEnd
+            ProgressBar1.Visible = True
+            Label5.Visible = True
+            dwnl_start = Now
+            wc.DownloadFileAsync(New Uri(Web.UpdateFile), dyn_hdzname)
+            While dwnl
+                Threading.Thread.Sleep(100)
+                Application.DoEvents()
+            End While
+            RemoveHandler wc.DownloadProgressChanged, AddressOf DwnlProgress
+            RemoveHandler wc.DownloadFileCompleted, AddressOf DwnlEnd
+            ProgressBar1.Visible = False
+            Label5.Visible = False
+        Catch ex As Exception
+            dwnl_ok = False
+            MsgBox(ex.Message, MsgBoxStyle.ApplicationModal Or MsgBoxStyle.Exclamation, "Ошибка при обновлении")
+        End Try
+        Try
+            If dwnl_ok Then
+                Dim psi As New ProcessStartInfo(IO.Path.Combine(localPath, pluFn), "/hdz """ & dyn_hdzname & """ /path """ & Application.ExecutablePath & """ /exe PLReNewer.exe")
+                If Not IsAdmin Then psi.Verb = "runas"
+                psi.UseShellExecute = True
+                Process.Start(psi)
+                Me.Close()
+                CType(log, Form).Close()
+            Else
+                Throw New Exception()
+            End If
+        Catch ex As Exception
+            Button1.Enabled = True
+            Button2.Enabled = True
+            Button3.Enabled = True
+        End Try
     End Sub
     Private Sub DwnlProgress(ByVal sender As Object, ByVal e As DownloadProgressChangedEventArgs)
         ProgressBar1.Value = e.ProgressPercentage
