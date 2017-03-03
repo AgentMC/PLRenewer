@@ -88,14 +88,18 @@ Friend Class Updater
         Button3.Enabled = False
         dwnl = True
         dwnl_ok = False
-        Dim temp As String = Environment.GetEnvironmentVariable("temp")
-        Dim localPath As String = IO.Path.GetDirectoryName(Application.ExecutablePath)
         Const pluFn = "PLU.exe", hdzaFn = "HDZArchive.dll"
+        Dim temp As String = Environment.GetEnvironmentVariable("temp")
+        Dim plrUpdaterPath = IO.Path.Combine(temp, "PlrUpdater")
+        Dim pluPath = IO.Path.Combine(plrUpdaterPath, pluFn)
+        Dim hdzaPath = IO.Path.Combine(plrUpdaterPath, hdzaFn)
         Dim dyn_hdzname As String = ""
         Try
             log.LS("Updater: copying updater engine to temp...")
-            IO.File.Copy(IO.Path.Combine(localPath, pluFn), IO.Path.Combine(temp, pluFn), True)
-            IO.File.Copy(IO.Path.Combine(localPath, hdzaFn), IO.Path.Combine(temp, hdzaFn), True)
+            Dim localPath As String = IO.Path.GetDirectoryName(Application.ExecutablePath)
+            IO.Directory.CreateDirectory(plrUpdaterPath)
+            IO.File.Copy(IO.Path.Combine(localPath, pluFn), pluPath, True)
+            IO.File.Copy(IO.Path.Combine(localPath, hdzaFn), hdzaPath, True)
 
             log.LS("Updater: begin async dl of descr...")
             dyn_hdzname = IO.Path.Combine(temp, Now.Ticks.ToString)
@@ -119,7 +123,7 @@ Friend Class Updater
         End Try
         Try
             If dwnl_ok Then
-                Dim psi As New ProcessStartInfo(IO.Path.Combine(localPath, pluFn), "/hdz """ & dyn_hdzname & """ /path """ & Application.ExecutablePath & """ /exe PLReNewer.exe")
+                Dim psi As New ProcessStartInfo(pluPath, "/hdz """ & dyn_hdzname & """ /path """ & Application.ExecutablePath & """ /exe PLReNewer.exe")
                 If Not IsAdmin Then psi.Verb = "runas"
                 psi.UseShellExecute = True
                 Process.Start(psi)

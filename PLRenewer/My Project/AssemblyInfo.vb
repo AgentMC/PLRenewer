@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("PlayList Re-Newing Appliance")> 
-<Assembly: AssemblyDescription("Build 112, 03.03.17")> 
+<Assembly: AssemblyDescription("Build 113, 04.03.17")> 
 <Assembly: AssemblyCompany("HACK-Design, agentmc@xaker.ru")> 
 <Assembly: AssemblyProduct("PLReNewer by HACK-Design")> 
 <Assembly: AssemblyCopyright("© AgentMC, 2008-2017")> 
