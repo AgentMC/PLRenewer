@@ -2,6 +2,10 @@
 
 This repo is a storage of my 8-year-old (at least!) project that I decided to update and adapt to modern smartphones because of reasons.
 
+Previous location (2010-2015): https://code.google.com/archive/p/plrenewer/ (readonly archive)
+Previous location (2008-2010): http://forum.ichip.ru (inaccessible now), http://exchip.ru (inaccessible now)
+Lol it seems whereever I publish this code, the hosting dies. 
+
 It includes 
 
 - *PLRenewer*, an application to build random playlist from your audio file collection and push it to a device (oldfags, do you remember the hardware MP3 players?). Currently adapted to work over MTP (WPD) protocol which is required by modern smartphones not representing themselves as a flash drive.
