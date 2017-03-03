@@ -37,6 +37,11 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "License", "Licensing\Licens
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HDLT", "Licensing\HDLT\HDLT.vbproj", "{8A202B84-F8B5-4205-A477-B7CF8B1E730C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{17C76804-C2B4-4B30-9620-DFB61D629F4C}"
+	ProjectSection(SolutionItems) = preProject
+		log.txt = log.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
