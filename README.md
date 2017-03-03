@@ -2,9 +2,9 @@
 
 This repo is a storage of my 8-year-old (at least!) project that I decided to update and adapt to modern smartphones because of reasons.
 
-Previous location (2010-2015): https://code.google.com/archive/p/plrenewer/ (readonly archive)
-Previous location (2008-2010): http://forum.ichip.ru (inaccessible now), http://exchip.ru (inaccessible now)
-Lol it seems whereever I publish this code, the hosting dies. 
+Previous location (2010-2015): https://code.google.com/archive/p/plrenewer/ (readonly archive) <br/>
+Previous location (2008-2010): http://forum.ichip.ru (inaccessible now), http://exchip.ru (inaccessible now) <br/>
+Lol it seems whereever I publish this code, the hosting dies. Good luck GitHub.
 
 It includes 
 
