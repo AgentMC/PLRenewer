@@ -13,3 +13,4 @@ _Resharper*
 *.*sdf
 Debug
 ipch
+Release/
