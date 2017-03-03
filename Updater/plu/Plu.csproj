@@ -104,9 +104,6 @@
       <Name>HDZArchive</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="script.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

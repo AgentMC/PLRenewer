@@ -39,7 +39,7 @@ Friend Class Updater
         Else
             log.LS("Updater: async download finished")
             Try
-                Dim lines() As String = e.Result.Split(New String() {Chr(13) & Chr(10)}, StringSplitOptions.RemoveEmptyEntries)
+                Dim lines() As String = e.Result.Split(New Char() {Chr(13), Chr(10)}, StringSplitOptions.RemoveEmptyEntries)
                 For Each line As String In lines
                     If line.StartsWith("<Assembly: AssemblyF") Then
                         newVer = line.Substring(32, 7)
@@ -56,7 +56,7 @@ Friend Class Updater
                                 log.LS("Updater: dialog will be shown")
                                 InitializeComponent()
                                 Label3.Text = My.Application.Info.Version.ToString & vbCrLf & newVer
-                                TextBox1.Text = wc.DownloadString(Web.LogFile)
+                                TextBox1.Text = wc.DownloadString(Web.LogFile).Replace(ChrW(&HA), ChrW(&HD) + ChrW(&HA))
                                 log.LX("Updater: showing up...")
                                 Me.ShowDialog(CType(log, IWin32Window))
                                 Exit For
